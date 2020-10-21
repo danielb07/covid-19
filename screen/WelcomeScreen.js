@@ -1,30 +1,30 @@
 import React from 'react'
-import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
-// import firebase from 'firebase';
-// import database from '../config'
+import {View, Text, StyleSheet, TextInput, Alert,TouchableOpacity} from 'react-native';
+import firebase from 'firebase';
+import database from '../config'
 
 export default class WelcomeScreen extends React.Component{
     constructor(){
         super();
         this.state={
-            emaIl:'',
+            email:'',
             passWord:''
         }
     }
 
-    LoginUser = (email,password) =>{
-        // firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-        //     // Handle Errors here.
-        //     var errorCode = error.code;
-        //     var errorMessage = error.message;
-        //     return Alert.alert(errorMessage)
-        //   })
-        //   .then(()=>{
-        //       this.props.navigation.navigate('NewsScreen')
-              
-        //   });
-        this.props.navigation.navigate('NewsScreen')
-        return Alert.alert("welcome")
+    LoginUser = (emailId,password) =>{
+        firebase.auth().signInWithEmailAndPassword(emailId, password)
+        .then(()=>{
+            this.props.navigation.navigate('Drawer')
+          })
+        .catch((error)=>{
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            return Alert.alert(errorMessage)
+          });
+            
+       
     }
     render(){
         return(
@@ -46,7 +46,7 @@ export default class WelcomeScreen extends React.Component{
                                     placeholder={"Email"}
                                     onChangeText={(text)=>{
                                         this.setState({
-                                            emailId:text
+                                            email:text
                                         })
                                     }}/>
                                 </View>
@@ -75,6 +75,21 @@ export default class WelcomeScreen extends React.Component{
                             </tr>
                         </table>
                     </View>
+                    <TouchableOpacity
+                    style={[styles.button,{marginBottom:20, marginTop:20,marginLeft:640}]}
+                    onPress = {()=>{
+                        this.LoginUser(this.state.email, this.state.passWord)
+                    }}
+                    >
+                    <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <Text style={{marginTop:10,marginLeft:720}}>Don't have an account ?</Text>
+                   <TouchableOpacity
+                    style={[styles.button,{marginLeft:640}]}
+                    onPress={()=>{
+                        this.props.navigation.navigate('SignUpScreen')
+                    }}><Text style={styles.buttonText}>SignUp</Text></TouchableOpacity>
+                    
                 </View>
             </View>
         )
@@ -104,5 +119,27 @@ const styles = StyleSheet.create({
         borderColor:'#ffab91',
         fontSize: 20,
         marginBottom:20,
+      },
+      button:{
+        width:300,
+        height:50,
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:25,
+        backgroundColor:"#ff9800",
+        shadowColor: "#000",
+        shadowOffset: {
+           width: 0,
+           height: 8,
+        },
+        shadowOpacity: 0.30,
+        shadowRadius: 10.32,
+        elevation: 16,
+        padding: 10
+      },
+      buttonText:{
+        color:'#ffff',
+        fontWeight:'200',
+        fontSize:20
       }
   })

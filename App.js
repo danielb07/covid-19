@@ -3,7 +3,8 @@ import { createAppContainer, createSwitchNavigator} from 'react-navigation';
 
 
 import WelcomeScreen from './screen/WelcomeScreen';
-import NewsScreen from './screen/NewsScreen'
+import {AppDrawer} from './components/AppDrawer'
+import SignUpScreen from './screen/SignUpScreen'
 
 
 export default function App() {
@@ -14,7 +15,8 @@ export default function App() {
 
 const switchNavigator = createSwitchNavigator({
   WelcomeScreen:{screen: WelcomeScreen},
-  NewsScreen:{screen:NewsScreen}
+  SignUpScreen:{screen:SignUpScreen},
+  Drawer:{screen:AppDrawer}
 })
 
 const AppContainer =  createAppContainer(switchNavigator);
