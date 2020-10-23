@@ -14,9 +14,10 @@ export default class CovidCase extends React.Component{
     constructor(){
         super()
         this.state ={
+            countries:[],
             userId:firebase.auth().currentUser.email,
             user:'',
-            listItems:''
+            listItems:'',
         }
     }
 
@@ -46,37 +47,37 @@ export default class CovidCase extends React.Component{
             let json_data = JSON.parse(JSON.stringify(data));
             let countries_json = json_data.dates[date].countries;
             console.log(countries_json);
-            let countries = []
             for(var country in countries_json){
-                countries.push(country)
+                this.setState({
+                    countries:[...this.state.countries,country]
+                })
             }
-            this.setState({
-                listItems:countries
-            })
+            
             
         });
     }
 
     render(){
+
         return(
             <View>
             <ScrollView>
                 <View style={{flex:1, justifyContent:'center', alignItems:'center', marginBottom:650,borderBottomWidth:2}}>
                     <Text style={styles.title}>
-                        {this.state.user}
+                        Welcome
                     </Text>
-                    
+           
                 </View>
-                
             </ScrollView>
+            
 
             
             
             <FlatList
-            data={this.state.listItems}
+            data={this.state.countries}
             renderItem={({item})=>{
                 <View>
-                    <Text>{item}</Text>
+                    <Text>{item.country}</Text>
                 </View>
             }}
             keyExtractor={(item,index)=>index.toString()}

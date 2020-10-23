@@ -51,7 +51,7 @@ export default class SignUpScreen extends React.Component{
                             <KeyboardAvoidingView style={styles.KeyboardAvoidingView}>
                                 <Text style={styles.modalTitle}>
                                     Registration
-                                </Text>
+                                </Text> 
                                 <View style={{margin:10}}>
                                     
                                     <TextInput
