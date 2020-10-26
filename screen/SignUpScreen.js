@@ -30,7 +30,8 @@ export default class SignUpScreen extends React.Component{
             database.collection('user').add({
                 first_name:this.state.firstName,
                 last_name:this.state.lastName,
-                email:this.state.email
+                email:this.state.email,
+                profilePicture:"#"
             })
         })
         .catch(function(error) {

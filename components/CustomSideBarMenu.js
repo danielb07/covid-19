@@ -77,10 +77,20 @@ export default class CustomSidebarMenu extends Component{
       });
   };
 
+  avatarImage = () =>{
+    db.collection("users")
+    .where("email_id", "==", this.state.userId)
+    .onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        this.setState({
+          image:doc.data().profilePicture
+        })
+      });
+    });}
+
   componentDidMount(){
     this.getUserName();
     this.fetchImage(this.state.userId);
-
   }
   render(){
     return(

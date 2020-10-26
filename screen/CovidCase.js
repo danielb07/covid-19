@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Text,
     ScrollView,
+    SafeAreaView,
     FlatList,
     TouchableOpacity
 } from 'react-native'
@@ -31,27 +32,37 @@ export default class CovidCase extends React.Component{
             });
         })
     }
+
+    
     componentDidMount(){
         this.userName(this.state.userId);
         this.getCovidData();
     }
 
+    showCountryData(name){
+        console.log(this.state.countries_json['India']);
+    }
+    
     getCovidData=()=>{
        
         let today = new Date();
         let date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
-        console.log(date)
+        // console.log(date)
         fetch('https://api.covid19tracking.narrativa.com/api/'+date)
         .then(response => response.json())
         .then(data =>  {
             let json_data = JSON.parse(JSON.stringify(data));
             let countries_json = json_data.dates[date].countries;
-            console.log(countries_json);
+            this.setState({
+                countries_json:countries_json
+            });
+            
             for(var country in countries_json){
                 this.setState({
                     countries:[...this.state.countries,country]
                 })
-            }
+            }  
+            
             
             
         });
@@ -60,32 +71,36 @@ export default class CovidCase extends React.Component{
     render(){
 
         return(
-            <View>
-            <ScrollView>
-                <View style={{flex:1, justifyContent:'center', alignItems:'center', marginBottom:650,borderBottomWidth:2}}>
-                    <Text style={styles.title}>
-                        Welcome
-                    </Text>
-           
-                </View>
-            </ScrollView>
-            
-
-            
-            
-            <FlatList
-            data={this.state.countries}
-            renderItem={({item})=>{
-                <View>
-                    <Text>{item.country}</Text>
-                </View>
-            }}
-            keyExtractor={(item,index)=>index.toString()}
-            />
+            <View style={{ flex: 1 }}>
+                <ScrollView>
+                    <Text style={styles.titlex}>Welcome</Text>
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.state.countries}
+                            renderItem={({item}) => <Country name={item} countryData={this.state.countries_json[item]}/>}
+                        />
+                        
+                    </SafeAreaView>
+                </ScrollView>
+                
             </View>
         )
     }
-} 
+}
+
+
+
+
+const Country = ({ name,countryData }) => (
+    <View style={styles.flatList}>
+        <TouchableOpacity  onPress={() => {
+            console.log(countryData)
+        }}>
+            <Text style={styles.flatListText}>{name}</Text>
+        </TouchableOpacity>
+    </View>
+  );
+
 
 const styles = StyleSheet.create({
     title :{
@@ -94,4 +109,30 @@ const styles = StyleSheet.create({
         color : '#ff9800',
        
       },
+      flatlistContainer:{
+        
+        padding: 0,
+        marginVertical: 8,
+        marginHorizontal: 16,
+       
+      },
+      flatList:{
+        backgroundColor: '#f9c2ff',
+        marginLeft:'25%',
+        padding: 20,
+        marginVertical: 8,
+        width:'50%',
+        height:'90%',
+        alignItem:'center',
+        justifyContent:'center',
+        borderRadius:'15px',
+        borderWidth:2
+      },
+      flatListText:{
+          fontSize:18,
+          fontWeight:'bold',
+          justifyContent:'center',
+          alignSelf:'center'
+      }
+      
 })
