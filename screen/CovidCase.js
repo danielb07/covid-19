@@ -10,15 +10,21 @@ import {
 } from 'react-native'
 import db from '../config'
 import firebase from 'firebase'
+import RNCountry from 'react-native-countries';
+import CovidCountry from './CovidCountry'
 
 export default class CovidCase extends React.Component{
     constructor(){
         super()
         this.state ={
             countries:[],
+            myCountry:[],
             userId:firebase.auth().currentUser.email,
             user:'',
             listItems:'',
+            countries_json:'',
+            isDetailVisible:false,
+            countryName:''
         }
     }
 
@@ -27,17 +33,14 @@ export default class CovidCase extends React.Component{
             .then((snapshot)=>{
                 snapshot.forEach((doc) => {
                 this.setState({
-                    "user" : "Welcome "+ doc.data().first_name + " " + doc.data().last_name
+                    "user" : doc.data().first_name + " " + doc.data().last_name
                 })
             });
         })
     }
 
     
-    componentDidMount(){
-        this.userName(this.state.userId);
-        this.getCovidData();
-    }
+    
 
     showCountryData(name){
         console.log(this.state.countries_json['India']);
@@ -58,28 +61,63 @@ export default class CovidCase extends React.Component{
             });
             
             for(var country in countries_json){
-                this.setState({
-                    countries:[...this.state.countries,country]
-                })
-            }  
-            
-            
+                if (country !== this.state.myCountry){
+                    this.setState({
+                        countries:[...this.state.countries,country],     
+                    })
+                }
+            }
+            this.state.countries.unshift(this.state.myCountry)
             
         });
+    }
+    
+
+    getLocation = () =>{
+        // console.log('here')
+        // let proxy_url = 'https://cors-anywhere.herokuapp.com/';
+        // var fetch_url = 'https://freegeoip.net/json/';
+        // fetch(proxy_url + fetch_url)
+        // .then((response) => response.json())
+        // .then((responseJson) => {
+        //     console.log(responseJson);
+        //     this.setState({
+        //     countryName: responseJson.country_name,
+        //     regionName: responseJson.region_name
+        //     });
+        //     console.log(this.state.countryName);
+        // })
+        // .catch((error) => {
+        // //console.error(error);
+        // });
+
+    }
+    getMyCountry = () =>{
+        this.setState({
+            
+            myCountry:"India"
+        })
+    }
+
+    componentDidMount(){
+        this.userName(this.state.userId);
+        this.getMyCountry();
+        this.getCovidData();
+        this.getLocation();
     }
 
     render(){
 
         return(
             <View style={{ flex: 1 }}>
+                    <Text style={[styles.title,{alignItems:'center',justifyContent:'center'}]}>Welcome</Text>
                 <ScrollView>
-                    <Text style={styles.titlex}>Welcome</Text>
+                    
                     <SafeAreaView>
                         <FlatList
                             data={this.state.countries}
-                            renderItem={({item}) => <Country name={item} countryData={this.state.countries_json[item]}/>}
+                            renderItem={({item}) => <CovidCountry name={item} mycountry={this.state.myCountry} countryData={this.state.countries_json[item]}/>}
                         />
-                        
                     </SafeAreaView>
                 </ScrollView>
                 
@@ -91,15 +129,7 @@ export default class CovidCase extends React.Component{
 
 
 
-const Country = ({ name,countryData }) => (
-    <View style={styles.flatList}>
-        <TouchableOpacity  onPress={() => {
-            console.log(countryData)
-        }}>
-            <Text style={styles.flatListText}>{name}</Text>
-        </TouchableOpacity>
-    </View>
-  );
+
 
 
 const styles = StyleSheet.create({
@@ -107,32 +137,47 @@ const styles = StyleSheet.create({
         fontSize:60,
         fontWeight:'300',
         color : '#ff9800',
+        alignSelf:'center',
+        justifyContent:'center'
        
       },
       flatlistContainer:{
         
         padding: 0,
         marginVertical: 8,
-        marginHorizontal: 16,
+        marginHorizontal: 8,
        
       },
       flatList:{
-        backgroundColor: '#f9c2ff',
+        backgroundColor: '#44DE28',
         marginLeft:'25%',
         padding: 20,
         marginVertical: 8,
         width:'50%',
-        height:'90%',
+        paddingTop:50,
+        paddingBottom:50,
         alignItem:'center',
         justifyContent:'center',
-        borderRadius:'15px',
-        borderWidth:2
       },
       flatListText:{
-          fontSize:18,
-          fontWeight:'bold',
+          fontSize:37,
           justifyContent:'center',
           alignSelf:'center'
+      },
+      mycountryText:{
+          fontSize:37,
+          justifyContent:'center',
+          alignSelf:'center',
+          
+      },
+      mycountryButton:{
+          backgroundColor:'#267EB5',
+          width:'50%',
+          height:150,
+          justifyContent:'center',
+          alignItem:'center',
+          marginLeft:330
+
       }
       
 })

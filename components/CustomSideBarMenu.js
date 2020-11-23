@@ -22,9 +22,9 @@ export default class CustomSidebarMenu extends Component{
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           this.setState({
-            name: doc.data().first_name + " " + doc.data().last_name,
-            docId: doc.id,
-            image: doc.data().image,
+            "name": doc.data().first_name + " " + doc.data().last_name,
+            "docId": doc.id,
+            "image": doc.data().image,
           });
         });
       });
@@ -102,9 +102,7 @@ export default class CustomSidebarMenu extends Component{
           }}
           
           size="xlarge"
-          onPress={()=>{
-            this.selectPicture();
-          }}
+          
           icon={{name: 'user', type: 'font-awesome'}}
           showEditButton
           />

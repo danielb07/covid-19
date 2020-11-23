@@ -12,7 +12,7 @@ export default class Dummy extends React.Component{
         return(
             <View>
                 <Text style={styles.title}>
-                    Dummy2
+                    AboutMe
                 </Text>
             </View>
         )
@@ -21,6 +21,7 @@ export default class Dummy extends React.Component{
 
 const styles = StyleSheet.create({
     title :{
+        alignSelf:'center',
         fontSize:60,
         fontWeight:'300',
         color : '#ff9800'
