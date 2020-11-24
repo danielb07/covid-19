@@ -15,7 +15,7 @@ import CovidCountry from './CovidCountry'
 
 export default class CovidCase extends React.Component{
     constructor(){
-        super()
+        super();
         this.state ={
             countries:[],
             myCountry:[],
@@ -24,7 +24,8 @@ export default class CovidCase extends React.Component{
             listItems:'',
             countries_json:'',
             isDetailVisible:false,
-            countryName:''
+            countryName:'',
+            test:''
         }
     }
 
@@ -69,6 +70,7 @@ export default class CovidCase extends React.Component{
             }
             this.state.countries.unshift(this.state.myCountry)
             
+            
         });
     }
     
@@ -97,6 +99,7 @@ export default class CovidCase extends React.Component{
             
             myCountry:"India"
         })
+        
     }
 
     componentDidMount(){
@@ -104,6 +107,7 @@ export default class CovidCase extends React.Component{
         this.getMyCountry();
         this.getCovidData();
         this.getLocation();
+        
     }
 
     render(){
@@ -120,7 +124,6 @@ export default class CovidCase extends React.Component{
                         />
                     </SafeAreaView>
                 </ScrollView>
-                
             </View>
         )
     }
