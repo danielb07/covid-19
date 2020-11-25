@@ -15,11 +15,11 @@ export default class CovidHospital extends React.Component{
         return(
             
             <View style={styles.flatList}>
-                <Text style={[styles.flatListText,{fontWeight:'bold'}]}>{this.props.name}</Text>
+                <Text style={[styles.flatListText,{fontWeight:'bold'}]}>{this.props.loc}</Text>
             <View>
                     
             <TouchableOpacity>
-                <Text style={styles.flatListText}>{this.props.address}</Text>
+                <Text style={styles.flatListText}>{this.props.phone}</Text>
             </TouchableOpacity>
 
             </View>

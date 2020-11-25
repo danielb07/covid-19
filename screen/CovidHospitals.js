@@ -8,6 +8,7 @@ import {
     FlatList
 } from 'react-native'
 import CovidHospital from './CovidHospital';
+import {Header} from 'react-native-elements'
 
 
 export default class CovidHospitals extends React.Component{
@@ -80,10 +81,18 @@ export default class CovidHospitals extends React.Component{
         this.getTestCenters();
     }
     render(){
-        console.log(this.state.testcenters);
         return(
             <View style={{ flex: 1 }}>
-                    <Text style={[styles.title,{alignItems:'center',justifyContent:'center'}]}>Welcome</Text>
+                <Header
+                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    centerComponent={{ text: 'COVID HOSPITAL', style: { color: '#fff' } }}
+                    />
+                    <View style={{alignItems:'center',justifyContent:'center',borderWidth:3,marginRight:200,marginLeft:200}}>
+                        <Text style={[styles.subtitle,{alignItems:'center',justifyContent:'center'}]}>
+                            Get the name and address of Covid testing centers near you.
+                            Click on a test center to get the navigation to the test center.
+                        </Text>
+                    </View>
                 <ScrollView>
                     
                     <SafeAreaView>
@@ -103,6 +112,6 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         fontSize:40,
         fontWeight:'300',
-        color : '#ff9800'
+        color : '#0a0593'
       },
 })

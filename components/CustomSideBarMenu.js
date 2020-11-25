@@ -13,6 +13,7 @@ export default class CustomSidebarMenu extends Component{
       user:'',
       image:'#',
       name:"",
+      opendrawer:false
     }
   }
 
@@ -82,8 +83,8 @@ export default class CustomSidebarMenu extends Component{
     .where("email_id", "==", this.state.userId)
     .onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        this.setState({
-          image:doc.data().profilePicture
+        db.collection('user').add({
+          profilePicture:this.state.image
         })
       });
     });}
@@ -91,6 +92,12 @@ export default class CustomSidebarMenu extends Component{
   componentDidMount(){
     this.getUserName();
     this.fetchImage(this.state.userId);
+  }
+
+  openDrawer = () =>{
+    this.setState({
+      opendrawer:true
+    })
   }
   render(){
     return(
@@ -105,9 +112,14 @@ export default class CustomSidebarMenu extends Component{
           
           icon={{name: 'user', type: 'font-awesome'}}
           showEditButton
+          onPress={()=>{
+            this.selectPicture() 
+          }}
           />
           <Text style={{fontWeight:'100',fontSize:20, paddingTop:10}}>{this.state.name}</Text>
-        <DrawerItems {...this.props}/>
+        <DrawerItems
+        open={this.state.opendrawer}
+         {...this.props}/>
         <View style={{flex:1,justifyContent:'flex-end',paddingBottom:30}}>
           <TouchableOpacity style={{justifyContent:'center',padding:10,height:30,width:'100%'}}
           onPress = {() => {

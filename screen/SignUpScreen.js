@@ -25,14 +25,13 @@ export default class SignUpScreen extends React.Component{
     SignUp = (email,password) =>{
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(()=>{
-            this.props.navigation.navigate('Drawer')
-
             database.collection('user').add({
                 first_name:this.state.firstName,
                 last_name:this.state.lastName,
                 email:this.state.email,
-                profilePicture:"#"
+                profilePicture:'#'
             })
+            this.props.navigation.navigate('Drawer')
         })
         .catch(function(error) {
             // Handle Errors here.
@@ -40,6 +39,7 @@ export default class SignUpScreen extends React.Component{
             var errorMessage = error.message;
             // ...
           });
+         
     }
     render(){
         return(

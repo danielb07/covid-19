@@ -90,27 +90,18 @@ export default class CovidCountryCase extends React.Component{
 
 const styles = StyleSheet.create({
     flatList:{
-        backgroundColor: '#44DE28',
-        marginLeft:'25%',
-        padding: 20,
-        marginVertical: 8,
-        width:'50%',
-        paddingTop:50,
-        paddingBottom:50,
         alignItem:'center',
         justifyContent:'center',
-      },
-      mycountryflatList:{
-        backgroundColor: '#267eb5',
-        marginLeft:'25%',
+        borderWidth:5,
+        borderRadius:'12px',
+        marginLeft:'30%',
         padding: 20,
         marginVertical: 8,
-        width:'50%',
-        paddingTop:50,
-        paddingBottom:50,
-        alignItem:'center',
-        justifyContent:'center',
+        width:'40%',
+        paddingTop:10,
+        paddingBottom:10,
       },
+      
       flatListText:{
           fontSize:37,
           justifyContent:'center',

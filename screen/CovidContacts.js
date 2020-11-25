@@ -11,21 +11,20 @@ import {
 import db from '../config'
 import firebase from 'firebase'
 import RNCountry from 'react-native-countries';
-import CovidCountry from './CovidCountry'
+import CovidCountry from './CovidContact'
+import CovidContact from './CovidContact';
 import {Header} from 'react-native-elements'
 
-export default class CovidCase extends React.Component{
+export default class CovidContacts extends React.Component{
     constructor(){
         super();
         this.state ={
-            countries:[],
-            myCountry:[],
             userId:firebase.auth().currentUser.email,
             user:'',
             listItems:'',
             countries_json:'',
+            myState:'',
             isDetailVisible:false,
-            countryName:'',
             test:'',
             isLoading:true
         }
@@ -43,34 +42,25 @@ export default class CovidCase extends React.Component{
     }
 
     
-    
 
-    showCountryData(name){
-        console.log(this.state.countries_json['India']);
-    }
     
     getCovidData=()=>{
        
-        let today = new Date();
-        let date = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+        
         // console.log(date)
-        fetch('https://api.covid19tracking.narrativa.com/api/'+date)
+        fetch('https://api.rootnet.in/covid19-in/contacts')
         .then(response => response.json())
         .then(data =>  {
             let json_data = JSON.parse(JSON.stringify(data));
-            let countries_json = json_data.dates[date].countries;
-            this.setState({
-                countries_json:countries_json,
-            });
-            
-            for(var country in countries_json){
-                if (country !== this.state.myCountry){
-                    this.setState({
-                        countries:[...this.state.countries,country],     
-                    })
-                }
+            // console.log(json_data.data.contacts.primary)
+            let regionalData = json_data.data.contacts.regional;
+            if(regionalData != this.state.myState){
+                this.setState({
+                    regionalData:regionalData
+                });
             }
-            this.state.countries.unshift(this.state.myCountry);
+
+            
             this.setState({
                 isLoading:false
             })
@@ -99,44 +89,50 @@ export default class CovidCase extends React.Component{
         // });
 
     }
-    getMyCountry = () =>{
+    getState = () =>{
         this.setState({
             
-            myCountry:"India"
+            myState:"Uttar Pradesh"
         })
         
     }
 
     componentDidMount(){
         this.userName(this.state.userId);
-        this.getMyCountry();
+        this.getState();
         this.getCovidData();
         this.getLocation();
+        
     }
 
     render(){
-        
+
         return(
             <View style={{ flex: 1 }}>
                     <Header
                     leftComponent={{ icon: 'menu', color: '#fff' }}
-                    centerComponent={{ text: 'COVID CASES', style: { color: '#fff' } }}
+                    centerComponent={{ text: 'CONTACTS', style: { color: '#fff' } }}
                     />
                     <View style={{alignItems:'center',justifyContent:'center',borderWidth:3,marginRight:500,marginLeft:500}}>
                         <Text style={[styles.subtitle,{alignItems:'center',justifyContent:'center'}]}>
-                            See the Covid numbers worldwide. With your country at the top (default) 
+                            Get the contact number for your state
                         </Text>
                     </View>
-
                     {this.state.isLoading &&
-                        <Text style={[styles.title,{color:'#ff9800'}]}>Please wait. Country data is Loading...</Text>
+                        <Text style={[styles.title,{alignItems:'center',justifyContent:'center',color:'#ff9800'}]}>Please wait. Contact data is Loading...</Text>
                     }
-                     
                 <ScrollView>
                     <SafeAreaView>
                         <FlatList
-                            data={this.state.countries}
-                            renderItem={({item}) => <CovidCountry name={item} mycountry={this.state.myCountry} countryData={this.state.countries_json[item]}/>}
+                            data={this.state.primary}
+                            renderItem={({item}) => <CovidContact loc={item.loc} phone={item.number} />}
+                        />
+                    </SafeAreaView>
+                    
+                    <SafeAreaView>
+                        <FlatList
+                            data={this.state.regionalData}
+                            renderItem={({item}) => <CovidContact loc={item.loc} phone={item.number} />}
                         />
                     </SafeAreaView>
                 </ScrollView>
@@ -153,12 +149,17 @@ export default class CovidCase extends React.Component{
 
 const styles = StyleSheet.create({
     title :{
-        fontSize:30,
+        fontSize:60,
         fontWeight:'300',
         color : '#0a0593',
         alignSelf:'center',
         justifyContent:'center'
        
+      },
+      subtitle :{
+        fontSize:20,
+        fontWeight:'300',
+        color : '#000000'
       },
       flatlistContainer:{
         

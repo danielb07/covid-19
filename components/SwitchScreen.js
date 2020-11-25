@@ -5,17 +5,32 @@ import CovidCase from '../screen/CovidCase'
 import CovidHospitals from '../screen/CovidHospitals';
 import MyTravelHistory from '../screen/MyTravelHistory'
 import AboutMe from '../screen/AboutMe'
+import Covidcontacts from '../screen/CovidContacts'
 
 
 
 export const AppTabNavigator = createBottomTabNavigator({
-  TestCenter : {
-    screen: CovidHospitals,
+    TestCenter : {
+      screen: CovidHospitals,
+    },
+    
+    CovidCases:{
+      screen: CovidCase,
+    },
+    Contacts:{
+      screen:Covidcontacts
+    }
   },
-  
-  CovidCases:{
-    screen: CovidCase,
-  },
-});
+  {
+    labeled: true,
+    initialRouteName: 'TestCenter',
+    activeTintColor: '#FF9800',
+    inactiveTintColor: 'black',
+    barStyle: { 
+      backgroundColor: '#FF9800',
+      
+    }, 
+  }, 
+);
 
 export default AppTabNavigator;
